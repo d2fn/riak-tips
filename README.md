@@ -2,7 +2,7 @@ _in progress_
 
 # Riak Tips
 
-A collection of Riak tips follows. This is based on my own experience using 1.2.1 with leveldb and bitcask backends. Yours, obviously, may differ. Apologies in advance for the subjective nature of this content. Every workload is unique and the combinatorial explosion of variables need to control a comprehensive set of benchmarks mean you are better off building your own.
+A collection of Riak tips follows. This is based on my own experience using 1.2.1 with leveldb and bitcask backends. Yours, obviously, may differ. Apologies in advance for the subjective nature of this content. Every workload is unique and the combinatorial explosion of variables needed to control a comprehensive set of benchmarks mean you are better off building your own.
 
 At sufficiently low scale, almost any database or usage pattern will suffice. This isn't a credit to the database, but rather a sign that you aren't solving a particularly difficult problem as far as scale is concerned. These tips are made for those who are truly building and operating "large scale" systems and considering Riak.
 
