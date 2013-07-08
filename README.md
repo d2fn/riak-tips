@@ -24,6 +24,6 @@ But hope is not lost. There is usually a way to adjust your workload in such a w
 For example, ...
 
 #3
-Clients should talk to Riak via an haproxy on localhost which is aware of all nodes in the ring. Don't attempt to build a client that is aware of all nodes and intelligently routes requests. Building such a client is complex and degenerates to building all of the failure detection intrinsic to haproxy. Haproxy will ensure that requests are routed to nodes that are alive.
+Clients should talk to Riak via an haproxy on localhost which is aware of all nodes in the ring. Don't attempt to build a client that is aware of all nodes and intelligently routes requests. Building such a client is complex and degenerates to building all of the failure detection intrinsic to haproxy.
 
 
