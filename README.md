@@ -11,7 +11,7 @@ Pull requests and generally constructive disparaging comments are welcome.
 #0
 Riak is not a place to store relational data. Don't use Riak with the expectation of replacing a MySQL database that makes heavy use of joins, enforces referential integrity, and forces data into a type system. Riak is not a search engine so don't expect to use it for free text indexing with long-term success. Don't employ Riak with the expectation of "querying" or "scanning" a range of data. While it affords some secondary index support (2i) by way of the leveldb backend, relying on these features in a heavily loaded production cluster has only brought myself and my colleagues disaster.
 
-That being said, Riak is the best key-value store I have ever used. It is wonderful for storing huge amounts of data so long as you can remember or compute the keys under it was stored. One you learn to tilt your head the right way and squawk the right squawks, it is a pleasure both to develop against and use in production.
+That being said, Riak is the best key-value store I have ever used. It is wonderful for storing huge amounts of data so long as you can remember or compute the keys under it was stored. One you learn to tilt your head the right way and squawk the right squawks, it is a pleasure both to develop against and use in production. It is possible to perform cluster upgrades and lose nodes (hard stop) with little to no application downtime.
 
 #1
 Use SSDs. RAID several together per machine in a 0 or 10 configuration if you can. Then proceed to #2.
@@ -22,4 +22,8 @@ A riak cluster tends to reach capacity long before its nodes exhaust CPU or IO. 
 But hope is not lost. There is usually a way to adjust your workload in such a way that lets Riak breathe much better and make use of the powerful hardware you've given it. The problem above arises from exhausting throughput of the cluster in terms of keys read/written. Simply reduce the number of keys by storing similar data together in blocks. Riak works wonderfully as a block store in this way.
 
 For example, ...
+
+#3
+Clients should talk to Riak via an haproxy on localhost which is aware of all nodes in the ring. Don't attempt to build a client that is aware of all nodes and intelligently routes requests. Building such a client is complex and degenerates to building all of the failure detection intrinsic to haproxy. Haproxy will ensure that requests are routed to nodes that are alive.
+
 
