@@ -11,7 +11,7 @@ Pull requests and generally constructive disparaging comments are welcome.
 #0
 Riak is not a place to store relational data. Don't use Riak with the expectation of replacing a MySQL database that makes heavy use of joins, enforces referential integrity, and forces data into a type system. Riak is not a search engine so don't expect to use it for free text indexing with long-term success. Don't employ Riak with the expectation of "querying" or "scanning" a range of data. While it affords some secondary index support (2i) by way of the leveldb backend, relying on these features in a heavily loaded production cluster has only brought myself and my colleagues disaster.
 
-That being said, Riak is the best key-value store I have ever used. It is wonderful for storing huge amounts of data so long as you can remember or compute the keys under it was stored. One you learn to tilt your head the right way and squawk the right squawks, it is a pleasure both to develop against and use in production. It is possible to perform cluster upgrades and lose nodes (hard stop) with little to no application downtime.
+That being said, Riak is the best key-value store I have ever used. It is wonderful for storing huge amounts of data so long as you can remember or compute the keys you want to read once they have been written. Once you learn to tilt your head the right way and squawk the right squawks, it is a pleasure both to develop against and use in production. It is possible to perform cluster upgrades and lose nodes (hard stop) with little to no application downtime.
 
 #1
 Use SSDs. RAID several together per machine in a 0 or 10 configuration if you can. Then proceed to #2.
