@@ -21,7 +21,14 @@ A riak cluster tends to reach capacity long before its nodes exhaust CPU or IO. 
 
 But hope is not lost. There is usually a way to adjust your workload in such a way that lets Riak breathe much better and make use of the powerful hardware you've given it. The problem above arises from exhausting throughput of the cluster in terms of keys read/written. Simply reduce the number of keys by storing similar data together in blocks. Riak works wonderfully as a block store in this way.
 
-For example, ...
+For example, if you are storing time-series data at a high resolution, try storing all information for, say, a 10 minute window under the same key. The math for aligning timestamps to these boundaries is simple enough:
+
+```
+irb(main):001:0> `date +%s`.strip + " -> " + (`date +%s`.to_i / (10*60) * (10*60)).to_s
+=> "1373491342 -> 1373491200"
+```
+
+But now you have a coordination problem. If writes for the same key originate from multiple nodes, you risk data loss. Ensuring a single writer per key is one way to overcome that. There are more sophisticated ways to handle this but there is no one correct answer. Future CRDT work in Riak may allow this coordination to happen within Riak, but for now it must happen elsewhere.
 
 #3
 Clients should talk to Riak via an haproxy on localhost which is aware of all nodes in the ring. Don't attempt to build a client that is aware of all nodes and intelligently routes requests. Building such a client is complex and degenerates to building all of the failure detection intrinsic to haproxy.
