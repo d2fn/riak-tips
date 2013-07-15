@@ -37,3 +37,4 @@ Clients should talk to Riak via an haproxy on localhost which is aware of all no
 Don't expose Riak to the internet. Not only does Riak not include native support for fine-grained access controls, it is straightforward to take down a cluster with an expensive map-reduce job. And because map-reduce jobs accept javascript, all of the issues of [mobile code](http://en.wikipedia.org/wiki/Mobile_code) in a distributed system applies--even if access to the cluster is well-controlled.
 
 Read [this post](http://aphyr.com/posts/224-do-not-expose-riak-to-the-internet) from @aphyr and @jrecursive for more details.
+
