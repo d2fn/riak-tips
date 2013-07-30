@@ -34,7 +34,7 @@ But now you have a coordination problem. If writes for the same key originate fr
 Clients should talk to Riak via an haproxy on localhost which is aware of all nodes in the ring. Don't attempt to build a client that is aware of all nodes and intelligently routes requests. Building such a client is complex and degenerates to building all of the failure detection intrinsic to haproxy.
 
 #3.1
-Simulate both failure and slowdown of a Riak node and measure the impact on your client. It's important to understand how a misbehaving cluster ripples through your infrastructure--and it will.
+Simulate both failure and slowdown of a Riak node and measure its impact on your client. It's important to understand how a misbehaving cluster ripples through your infrastructure--and it will.
 
 #4
 Don't expose Riak to the internet. Not only does Riak not include native support for fine-grained access controls, it is straightforward to take down a cluster with an expensive map-reduce job. And because map-reduce jobs accept javascript, all of the issues of [mobile code](http://en.wikipedia.org/wiki/Mobile_code) in a distributed system applies--even if access to the cluster is well-controlled.
