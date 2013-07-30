@@ -41,6 +41,8 @@ Don't expose Riak to the internet. Not only does Riak not include native support
 
 Read [this post](http://aphyr.com/posts/224-do-not-expose-riak-to-the-internet) from @aphyr and @jrecursive for more details.
 
+Solve security concerns outside of Riak, but ensure sufficient information is stored in your keys or values for you to do so.
+
 #5 todo rolling upgrades
 
 #6 choosing a backend
