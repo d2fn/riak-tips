@@ -45,6 +45,7 @@ Solve security concerns outside of Riak, but make sure you store sufficient info
 
 #5 todo rolling upgrades
 
-#6 choosing a backend
+#6
+Use the bitcask backend unless you absolutely can't do without indexed scans for keys falling in a range. If this is something you think you need, it's worth consdering redesigning your application so that you can compute keys directly instead. I mentioned in #2 that a cluster will usually reach capacity long before hardware resources are exhausted. Bitcask can mitigate this because it allows much greater disk throughput. There are, I believe, some other subtle interactions between the eleveldb NIF and the erlang scheduler that can briefly cause nodes to stop doing meaningful work. This may be part of the reason leveldb-backed clusters tend will tend to fair worse with equivalent workloads than a bitcask backed cluster.
 
 
