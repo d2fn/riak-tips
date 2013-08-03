@@ -33,19 +33,24 @@ But now you have a coordination problem. If writes for the same key originate fr
 #3
 Clients should talk to Riak via an haproxy on localhost which is aware of all nodes in the ring. Don't attempt to build a client that is aware of all nodes and intelligently routes requests. Building such a client is complex and degenerates to building all of the failure detection intrinsic to haproxy.
 
-#3.1
+#4
 Simulate both failure and slowdown of a Riak node and measure its impact on your client. It is important to understand how a misbehaving cluster ripples through your infrastructure--and it will.
 
-#4
+#5
 Don't expose Riak to the internet. Not only does Riak not include native support for fine-grained access controls, it is straightforward to take down a cluster with an expensive map-reduce job. And because map-reduce jobs accept javascript, all of the issues of [mobile code](http://en.wikipedia.org/wiki/Mobile_code) in a distributed system applies--even if access to the cluster is well-controlled.
 
 Read [this post](http://aphyr.com/posts/224-do-not-expose-riak-to-the-internet) from @aphyr and @jrecursive for more details.
 
 Solve security concerns outside of Riak, but make sure you store sufficient information in keys and values to do so.
 
-#5 todo rolling upgrades
-
 #6
 Use the bitcask backend unless you absolutely can't do without indexed scans for keys falling in a range. If this is something you think you need, it's worth considering redesigning your application so that you can compute keys directly instead. I mentioned in #2 that a cluster will usually reach capacity long before hardware resources are exhausted. Bitcask can mitigate this because it allows much greater disk throughput. There are, I believe, some other subtle interactions between the eleveldb NIF and the erlang scheduler that can briefly cause nodes to stop doing meaningful work. This may be part of the reason leveldb-backed clusters will tend to fair worse with equivalent workloads than a bitcask backed cluster.
 
+#7
+As of 1.2.1, the bitcask backend has the unfortunate behavior of aggresive TTL'ing of keys at the expense of (possibly dramatic) write amplification.
 
+First some background. Bitcask is a [log-structured hash table](http://downloads.basho.com/papers/bitcask-intro.pdf). Each bitcask database in your cluster arranges data into blocks of which the maximum size is configurable. All writes are directed to the current mutable db file. Once its size has reached the maximum, it is closed forever, marked as immutable, and a new db file is opened for writes. Every few minutes, bitcask looks at the state of each of its files and considers whether or not each is a candidate for merging. Merging is a way to free up disk space occupied by deleted keys, stale values, and expired data. Merges are also expensive and require fully reading many large files and rewriting them with irrelevant data ignored.
+
+Bitcask has the nice feature of auto-expiring keys for you once they reach a certain age. And merging is how these keys are discarded to free up disk space. But the default behavior of the bitcask backend is to consider a file for merging if the _oldest_ key is expired. This sets up a degenerate case whereby a single expired key in a large file requires that the entire file be read and rewritten with that single key removed. In later versions of Riak (I believe 1.4), the behavior is such that a file will be considered for merge only when the _newest_ key is expired. This means all data in the file can be efficiently discarded.
+
+#8 todo rolling upgrades
